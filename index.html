@@ -172,5 +172,41 @@
 
         displayLeaderboard(); // Load leaderboard on page load
     </script>
+    <script>
+    function startGame() {
+        let selectedMode = document.getElementById("gameMode").value;
+        document.getElementById("challengeContainer").style.display = "block";
+        
+        if (selectedMode === "timed") {
+            startTimedChallenge();
+        } else if (selectedMode === "multipleChoice") {
+            generateMultipleChoice();
+        } else if (selectedMode === "calculus") {
+            generateCalculusProblem();
+        } else {
+            generateProblem(); // Default mode
+        }
+    }
+
+    function generateCalculusProblem() {
+        let calculusTypes = ["derivative", "integral", "limit"];
+        let selectedType = calculusTypes[Math.floor(Math.random() * calculusTypes.length)];
+
+        if (selectedType === "derivative") {
+            let num = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = `${num * 2}x`; // d/dx (nx²) = 2nx
+            document.getElementById("mathProblem").innerHTML = `Find d/dx (${num}x²)`;
+        } 
+        else if (selectedType === "integral") {
+            let num = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = `${num}/2 * x² + C`; // ∫ nx dx = (n/2)x² + C
+            document.getElementById("mathProblem").innerHTML = `∫ ${num}x dx`;
+        } 
+        else if (selectedType === "limit") {
+            correctAnswer = "2"; // Example limit question
+            document.getElementById("mathProblem").innerHTML = `Find lim x→1 (2x)`;
+        }
+    }
+        </script>
 </body>
 </html>
