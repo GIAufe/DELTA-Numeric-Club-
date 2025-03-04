@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game - Delta Numeric Club</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to the Delta Numeric Club - Math Challenge</h1>
+    </header>
+
+    <main>
+        <section id="challenges">
+            <h3>Select Game Mode:</h3>
+            <select id="gameMode">
+                <option value="default">Regular Challenge</option>
+                <option value="timed">Timed Challenge</option>
+                <option value="multipleChoice">Multiple Choice</option>
+            </select>
+            <button onclick="startGame()">Start Game</button>
+
+            <div id="challengeContainer">
+                <h3 id="challengeTitle">Today's Challenge:</h3>
+                <p id="mathProblem"></p>
+                <form id="challengeForm">
+                    <label for="answer">Your Answer:</label>
+                    <input type="text" id="answer" name="answer" required>
+                    <button type="submit">Submit</button>
+                </form>
+                <p id="response"></p>
+            </div>
+
+            <p id="timer" style="display: none;">Time Left: <span id="timeLeft">60</span> sec</p>
+
+            <div id="multipleChoiceOptions" style="display: none;"></div>
+        </section>
+
+        <section id="leaderboard">
+            <h3>Leaderboard</h3>
+            <table id="leaderboardTable">
+                <tr>
+                    <th>Name</th>
+                    <th>Score</th>
+                </tr>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Delta Numeric Club</p>
+    </footer>
+
+    <script>
+        let correctAnswer;
+
+        function startGame() {
+            let selectedMode = document.getElementById("gameMode").value;
+            document.getElementById("challengeContainer").style.display = "block";
+            
+            if (selectedMode === "timed") {
+                startTimedChallenge();
+            } else if (selectedMode === "multipleChoice") {
+                generateMultipleChoice();
+            } else {
+                generateProblem(); // Default mode
+            }
+        }
+
+        // Regular math challenge
+        function generateProblem() {
+            let num1 = Math.floor(Math.random() * 10) + 1;
+            let num2 = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = num1 + num2;
+            document.getElementById("mathProblem").innerHTML = `${num1} + ${num2} = ?`;
+            document.getElementById("multipleChoiceOptions").style.display = "none"; // Hide MCQ
+        }
+
+        // Timed Challenge Mode
+        function startTimedChallenge() {
+            generateProblem();
+            let timeLeft = 60;
+            document.getElementById("timer").style.display = "block";
+
+            let countdown = setInterval(() => {
+                timeLeft--;
+                document.getElementById("timeLeft").innerText = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    document.getElementById("response").innerHTML = "⏳ Time's up! Try again.";
+                }
+            }, 1000);
+        }
+
+        // Multiple Choice Mode
+        function generateMultipleChoice() {
+            let num1 = Math.floor(Math.random() * 10) + 1;
+            let num2 = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = num1 + num2;
+            document.getElementById("mathProblem").innerHTML = `What is ${num1} + ${num2}?`;
+            
+            let choices = [correctAnswer, correctAnswer + 2, correctAnswer - 1, correctAnswer + 5];
+            choices.sort(() => Math.random() - 0.5); // Shuffle answers
+            
+            let optionsDiv = document.getElementById("multipleChoiceOptions");
+            optionsDiv.innerHTML = ""; // Clear previous options
+            optionsDiv.style.display = "block";
+
+            choices.forEach(choice => {
+                let button = document.createElement("button");
+                button.innerText = choice;
+                button.onclick = () => checkMultipleChoice(choice);
+                optionsDiv.appendChild(button);
+            });
+        }
+
+        function checkMultipleChoice(selected) {
+            if (selected === correctAnswer) {
+                document.getElementById("response").innerHTML = "✅ Correct! You earned a point.";
+                let name = prompt("Enter your name for the leaderboard:");
+                if (name) updateLeaderboard(name);
+            } else {
+                document.getElementById("response").innerHTML = "❌ Incorrect, try again!";
+            }
+        }
+
+        // Form Submission (Regular Challenge)
+        document.getElementById("challengeForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let answer = document.getElementById("answer").value;
+            let name = prompt("Enter your name:");
+
+            if (!name) {
+                alert("Name is required to submit.");
+                return;
+            }
+
+            if (parseInt(answer) === correctAnswer) {
+                document.getElementById("response").innerHTML = "✅ Correct! You've earned a point.";
+                updateLeaderboard(name);
+            } else {
+                document.getElementById("response").innerHTML = "❌ Incorrect, try again!";
+            }
+        });
+
+        // Leaderboard Functionality
+        function updateLeaderboard(name) {
+            let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
+
+            leaderboard[name] = (leaderboard[name] || 0) + 1; // Increase score
+
+            localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+            displayLeaderboard();
+        }
+
+        function displayLeaderboard() {
+            let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
+            let table = document.getElementById("leaderboardTable");
+            table.innerHTML = "<tr><th>Name</th><th>Score</th></tr>";
+
+            let sortedScores = Object.entries(leaderboard).sort((a, b) => b[1] - a[1]);
+
+            sortedScores.forEach(([name, score]) => {
+                let row = document.createElement("tr");
+                row.innerHTML = `<td>${name}</td><td>${score}</td>`;
+                table.appendChild(row);
+            });
+        }
+
+        displayLeaderboard(); // Load leaderboard on page load
+    </script>
+</body>
+</html>

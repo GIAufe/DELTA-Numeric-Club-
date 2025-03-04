@@ -1,0 +1,85 @@
+/* Basic Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #1f2a44;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+main {
+    padding: 20px;
+    text-align: center;
+}
+
+select, button {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #1f2a44;
+    cursor: pointer;
+}
+
+button {
+    background-color: #1f2a44;
+    color: white;
+}
+
+button:hover {
+    background-color: #334267;
+}
+
+#timer {
+    font-size: 18px;
+    font-weight: bold;
+    color: red;
+}
+
+#multipleChoiceOptions button {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#leaderboard {
+    margin-top: 30px;
+    text-align: center;
+}
+
+table {
+    width: 50%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #1f2a44;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #1f2a44;
+    color: white;
+}
+
+footer {
+    background-color: #1f2a44;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
