@@ -83,3 +83,16 @@ footer {
     width: 100%;
     bottom: 0;
 }
+#mathProblem {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2a44;
+}
+
+#multipleChoiceOptions button {
+    font-size: 1rem;
+    margin: 5px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #1f2a44;
+}
