@@ -79,12 +79,28 @@ th {
     color: #1f2a44;
 }
 
-#multipleChoiceOptions button {
+#mathProblem {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #d35400; /* Orange color for visibility */
+}
+
+#answer {
     font-size: 1rem;
-    margin: 5px;
+    padding: 8px;
+    margin: 10px;
+}
+
+button {
+    background-color: #1f2a44;
+    color: white;
+    border: none;
     padding: 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #1f2a44;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #34495e;
 }
 
 
