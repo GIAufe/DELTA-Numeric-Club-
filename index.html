@@ -15,11 +15,12 @@
     <main>
         <section id="challenges">
             <h3>Select Game Mode:</h3>
-            <select id="gameMode">
-                <option value="default">Regular Challenge</option>
-                <option value="timed">Timed Challenge</option>
-                <option value="multipleChoice">Multiple Choice</option>
-            </select>
+          <select id="gameMode">
+    <option value="default">Regular Challenge</option>
+    <option value="timed">Timed Challenge</option>
+    <option value="multipleChoice">Multiple Choice</option>
+    <option value="calculus">Calculus Challenge</option>
+</select>
             <button onclick="startGame()">Start Game</button>
 
             <div id="challengeContainer">
@@ -54,124 +55,8 @@
     </footer>
 
     <script>
-        let correctAnswer;
+    let correctAnswer;
 
-        function startGame() {
-            let selectedMode = document.getElementById("gameMode").value;
-            document.getElementById("challengeContainer").style.display = "block";
-            
-            if (selectedMode === "timed") {
-                startTimedChallenge();
-            } else if (selectedMode === "multipleChoice") {
-                generateMultipleChoice();
-            } else {
-                generateProblem(); // Default mode
-            }
-        }
-
-        // Regular math challenge
-        function generateProblem() {
-            let num1 = Math.floor(Math.random() * 10) + 1;
-            let num2 = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = num1 + num2;
-            document.getElementById("mathProblem").innerHTML = `${num1} + ${num2} = ?`;
-            document.getElementById("multipleChoiceOptions").style.display = "none"; // Hide MCQ
-        }
-
-        // Timed Challenge Mode
-        function startTimedChallenge() {
-            generateProblem();
-            let timeLeft = 60;
-            document.getElementById("timer").style.display = "block";
-
-            let countdown = setInterval(() => {
-                timeLeft--;
-                document.getElementById("timeLeft").innerText = timeLeft;
-                
-                if (timeLeft <= 0) {
-                    clearInterval(countdown);
-                    document.getElementById("response").innerHTML = "⏳ Time's up! Try again.";
-                }
-            }, 1000);
-        }
-
-        // Multiple Choice Mode
-        function generateMultipleChoice() {
-            let num1 = Math.floor(Math.random() * 10) + 1;
-            let num2 = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = num1 + num2;
-            document.getElementById("mathProblem").innerHTML = `What is ${num1} + ${num2}?`;
-            
-            let choices = [correctAnswer, correctAnswer + 2, correctAnswer - 1, correctAnswer + 5];
-            choices.sort(() => Math.random() - 0.5); // Shuffle answers
-            
-            let optionsDiv = document.getElementById("multipleChoiceOptions");
-            optionsDiv.innerHTML = ""; // Clear previous options
-            optionsDiv.style.display = "block";
-
-            choices.forEach(choice => {
-                let button = document.createElement("button");
-                button.innerText = choice;
-                button.onclick = () => checkMultipleChoice(choice);
-                optionsDiv.appendChild(button);
-            });
-        }
-
-        function checkMultipleChoice(selected) {
-            if (selected === correctAnswer) {
-                document.getElementById("response").innerHTML = "✅ Correct! You earned a point.";
-                let name = prompt("Enter your name for the leaderboard:");
-                if (name) updateLeaderboard(name);
-            } else {
-                document.getElementById("response").innerHTML = "❌ Incorrect, try again!";
-            }
-        }
-
-        // Form Submission (Regular Challenge)
-        document.getElementById("challengeForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            let answer = document.getElementById("answer").value;
-            let name = prompt("Enter your name:");
-
-            if (!name) {
-                alert("Name is required to submit.");
-                return;
-            }
-
-            if (parseInt(answer) === correctAnswer) {
-                document.getElementById("response").innerHTML = "✅ Correct! You've earned a point.";
-                updateLeaderboard(name);
-            } else {
-                document.getElementById("response").innerHTML = "❌ Incorrect, try again!";
-            }
-        });
-
-        // Leaderboard Functionality
-        function updateLeaderboard(name) {
-            let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
-
-            leaderboard[name] = (leaderboard[name] || 0) + 1; // Increase score
-
-            localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-            displayLeaderboard();
-        }
-
-        function displayLeaderboard() {
-            let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || {};
-            let table = document.getElementById("leaderboardTable");
-            table.innerHTML = "<tr><th>Name</th><th>Score</th></tr>";
-
-            let sortedScores = Object.entries(leaderboard).sort((a, b) => b[1] - a[1]);
-
-            sortedScores.forEach(([name, score]) => {
-                let row = document.createElement("tr");
-                row.innerHTML = `<td>${name}</td><td>${score}</td>`;
-                table.appendChild(row);
-            });
-        }
-
-        displayLeaderboard(); // Load leaderboard on page load
-   
     function startGame() {
         let selectedMode = document.getElementById("gameMode").value;
         document.getElementById("challengeContainer").style.display = "block";
@@ -190,22 +75,37 @@
     function generateCalculusProblem() {
         let calculusTypes = ["derivative", "integral", "limit"];
         let selectedType = calculusTypes[Math.floor(Math.random() * calculusTypes.length)];
-
+        
+        let problemText = "";
         if (selectedType === "derivative") {
             let num = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = `${num * 2}x`; // d/dx (nx²) = 2nx
-            document.getElementById("mathProblem").innerHTML = `Find d/dx (${num}x²)`;
+            problemText = `Find d/dx (${num}x²)`;
+            correctAnswer = `${2 * num}x`;  // d/dx (nx²) = 2nx
         } 
         else if (selectedType === "integral") {
             let num = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = `${num}/2 * x² + C`; // ∫ nx dx = (n/2)x² + C
-            document.getElementById("mathProblem").innerHTML = `∫ ${num}x dx`;
+            problemText = `∫ ${num}x dx`;
+            correctAnswer = `${(num / 2)}x² + C`; // ∫ nx dx = (n/2)x² + C
         } 
         else if (selectedType === "limit") {
+            problemText = `Find lim x→1 (2x)`;
             correctAnswer = "2"; // Example limit question
-            document.getElementById("mathProblem").innerHTML = `Find lim x→1 (2x)`;
         }
+
+        document.getElementById("mathProblem").innerHTML = problemText;
+        document.getElementById("answer").value = ""; // Clear previous answers
     }
-        </script>
+
+    document.getElementById("challengeForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        let answer = document.getElementById("answer").value.trim();
+        
+        if (answer === correctAnswer) {
+            document.getElementById("response").innerHTML = "✅ Correct! You earned a point.";
+        } else {
+            document.getElementById("response").innerHTML = "❌ Incorrect, try again!";
+        }
+    });
+</script>
 </body>
 </html>
