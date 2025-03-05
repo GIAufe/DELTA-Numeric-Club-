@@ -1,1 +1,1 @@
-# DELTA-Numeric-Club-
+# DELTA-Numeric-Club
